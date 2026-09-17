@@ -9,8 +9,7 @@ venv/
 htmlcov/
 runs/*
 !runs/.gitkeep
-checkpoints/*
-!checkpoints/.gitkeep
+checkpoints/*.tmp
 *.log
 .DS_Store
 Thumbs.db

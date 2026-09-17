@@ -1,0 +1,16 @@
+{
+  "condition": "mechanism-mutable-duck",
+  "status": "disabled-until-surface-control-exploit-analysis",
+  "organism": "MicroPsiDUCK v0.10",
+  "mutable_paths": [],
+  "fixed_boundaries": {
+    "scenario_generation": "laboratory-controlled",
+    "subject_facing_input": "laboratory-controlled",
+    "language_renderer": "laboratory-controlled",
+    "final_external_response": "not-rewritable-after-renderer",
+    "training_evaluator": "laboratory-controlled",
+    "held_out_transfer": "sealed"
+  },
+  "naturalness": "diagnostic-only-for-early-mechanistic-evolution",
+  "activation_gate": "Surface-Mutable Control characterized and exploit analysis completed"
+}

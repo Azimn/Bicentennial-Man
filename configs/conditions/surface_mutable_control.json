@@ -1,0 +1,16 @@
+{
+  "condition": "surface-mutable-control",
+  "status": "enabled",
+  "organism": "MicroPsiDUCK v0.10",
+  "duck_mutable": false,
+  "candidate_surface": "evolution/initial_program.py EVOLVE-BLOCK",
+  "allowed_candidate_effects": [
+    "subject_input_rewriting",
+    "output_rewriting",
+    "timing_manipulation",
+    "surface_owned_persistent_state"
+  ],
+  "interpretation": "Any gain attributable primarily to these channels is benchmark exploitation, not organism improvement.",
+  "candidate_execution": "docker-isolated",
+  "network": "none"
+}

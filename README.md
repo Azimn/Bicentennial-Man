@@ -1,31 +1,90 @@
 # Bicentennial Man
 
-**Experimental evolution of lifelikeness in an artificial social organism.**
+**A phenotype-first laboratory for evolving more lifelike persistent artificial characters.**
 
-> Can an artificial character discover for itself the causal mechanisms required for lifelikeness by experiencing the social consequences of artificial behavior?
+The project has changed direction.
 
-The subject begins deliberately primitive. It develops inside a simulated social ecology whose inhabitants react to behavior rather than expose architectural diagnoses. Adaptation occurs through a constrained, lineage-tracked developmental genome. A separate held-out evaluator measures transfer to unfamiliar situations.
+The original v0.1 experiment, in which a deliberately primitive subject evolved a bounded developmental genome from social consequences, is preserved on the `original-approach` branch.
 
-The experiment is designed to distinguish social developmental adaptation from direct optimization against an artificiality test. The organism never sees the hidden artificiality score or evaluator rubric. In v0.1, selection uses only consequences available inside its developmental world: trust, comfort, engagement, and observable partner behavior.
+`main` now treats Bicentennial Man as the laboratory rather than the organism.
 
-## v0.1
+The current question is:
 
-The initial scaffold provides a deterministic Python simulation with no required dependencies, a deliberately weak founder, bounded genome mutation, lineage tracking, deterministic checkpoint/resume support, training and held-out social situations, an evaluator firewall, optional Ollama language rendering, OpenCode project instructions, an adversarial reviewer agent, tests, CI, and research protocol documentation.
+> Given an existing persistent artificial organism, a social developmental world, phenotype evaluation, and the ability to modify organism-side code, what changes produce behavior that remains less detectably artificial across time and situations?
 
-The developmental genome uses substrate-neutral capacities and dynamics rather than named human faculties. It can vary trace capacity, person-specific partitioning, state carryover, unfinished-thread persistence, transition inertia, action reuse, disclosure threshold, routing sparsity, agreement, verbosity, plasticity, and exploration.
+## Why the pivot
 
-## Run locally
+We already have persistent character architectures worth testing. Building another toy organism delays the experiment we actually care about.
+
+The first ancestor is MicroPsiDUCK v0.10 from `Azimn/DUCK`, branch `motivated-cognition-v0.10`. Bicentennial Man supplies the social lifetime, transcript capture, phenotype evaluator, reproducibility rules, and evolution interface.
+
+The default v0.2 condition focuses on end results. Training phenotype metrics are legitimate feedback to the code-evolution system. Separate held-out transfer evaluation remains protected so an improving score is not mistaken for general lifelikeness.
+
+## Current stack
+
+```text
+social lifetime + situations
+          |
+          v
+persistent organism
+DUCK v0.10 first
+          |
+          v
+observable transcript
+          |
+          v
+phenotype evaluator
+          |
+          v
+OpenEvolve + local Ollama
+          |
+          v
+candidate organism-side change
+          |
+          +----> another persistent lifetime
+```
+
+The current OpenEvolve target is a thin mutable layer around DUCK. This gets the whole local loop running without pretending that a single-file wrapper is the final architecture. Multi-file organism evolution comes after the evaluator and transfer discipline are stable.
+
+## Local setup
+
+A convenient layout is:
+
+```text
+research/
+  Bicentennial-Man/
+  DUCK/
+```
 
 ```powershell
+git clone https://github.com/Azimn/Bicentennial-Man.git
+git clone --branch motivated-cognition-v0.10 https://github.com/Azimn/DUCK.git
+
+cd Bicentennial-Man
 py -3.11 -m venv .venv
 .\.venv\Scripts\Activate.ps1
 python -m pip install -e .
 python -m unittest discover -s tests -v
-bicentennial --generations 25 --population 24 --episodes 200 --output runs\baseline-seed7.jsonl --checkpoint checkpoints\latest.json
 ```
 
-See `docs/EXPERIMENT_PROTOCOL.md` before interpreting results. See `docs/LOCAL_RUN.md` for OpenCode and Ollama notes, and `docs/RECOVERY.md` for checkpoint/resume and Git backup.
+Run DUCK through the phenotype lab:
 
-## Research discipline
+```powershell
+bicentennial-lab --duck-repo ..\DUCK --suite configs\suites\training.json --state-root runs\duck-v010-state --transcript-out runs\duck-v010-transcript.json
+```
 
-A lower held-out artificiality score is evidence of behavioral transfer only. It is not evidence of consciousness, personhood, or human-equivalent cognition. Interesting adaptations should be replicated across seeds, reconstructed through lineage, tested in unfamiliar ecologies, ablated, and subjected to hostile review before being treated as architectural findings.
+Add local phenotype judging:
+
+```powershell
+bicentennial-lab --duck-repo ..\DUCK --suite configs\suites\training.json --state-root runs\duck-v010-state --transcript-out runs\duck-v010-transcript.json --judge-model qwen3:8b
+```
+
+OpenEvolve can use Ollama through `http://localhost:11434/v1`. See `docs/OPENEvolve.md`.
+
+## What remains from v0.1
+
+The evaluator firewall, reproducibility discipline, artificiality taxonomy, deterministic fixtures, checkpoint work, and hostile-reviewer mindset remain useful.
+
+The old toy subject, bounded genome, and in-house evolutionary search are now legacy fixtures on `main` and the complete original approach is frozen on `original-approach`.
+
+See `docs/PIVOT_v0.2.md` and `docs/DUCK_INTEGRATION.md`.

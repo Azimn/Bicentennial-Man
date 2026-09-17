@@ -1,26 +1,32 @@
 # Bicentennial Man project instructions
 
-This repository is a research experiment, not a product demo. Preserve causal interpretability and experimental provenance over feature count.
+Bicentennial Man is a phenotype-first research laboratory for persistent artificial organisms.
 
-The central question is whether an artificial social subject can discover mechanisms that reduce detectable artificiality through developmental interaction and social consequences.
+The v0.1 genome-search implementation is preserved on the `original-approach` branch. Do not restore it as the main architecture unless explicitly requested.
 
-Critical invariants:
+Current mission:
 
-1. The subject must never receive the held-out artificiality score, evaluator rubric, evaluator explanation, or architectural diagnosis.
-2. Selection in v0.1 uses only consequences available inside the developmental ecology. Held-out evaluation is measurement only.
-3. Do not add a mechanism merely because it sounds human-like. Prefer substrate-neutral capacities and dynamics, then test their causal role.
-4. Every mutation must be reconstructable from seed, parent identity, genome, and code version.
-5. New mechanisms require controls, held-out transfer, and ablation before claims are strengthened.
-6. Do not silently introduce an LLM into fitness, mutation, or hidden evaluation. LLM use must be explicitly logged by role and model.
-7. Keep raw experiment mechanics deterministic under a fixed seed.
-8. Never replace a failed experiment with post hoc storytelling. Preserve negative results.
+Use existing persistent organisms as ancestors, beginning with MicroPsiDUCK v0.10. Expose them to reproducible social lifetimes, measure observable artificiality and social coherence, let external code-evolution machinery propose organism-side changes, and test whether improvements transfer beyond the situations and judges used for optimization.
+
+Critical boundaries:
+
+1. The organism and the laboratory are different systems. Candidate code must not modify the scenario runner, evaluator, sealed transfer suite, or experiment records.
+2. Training phenotype metrics may be shown to the mutation engine in the default v0.2 engineering condition.
+3. Held-out transfer results are measurement only and must not be fed back into the same search that they evaluate.
+4. Preserve every candidate's parent, code diff, model identity, settings, transcript, metrics, seed, and resource cost when available.
+5. Do not redesign a subsystem from scratch when an existing implementation can be adapted or tested.
+6. Optimize observable behavior rather than theoretical resemblance to human internals.
+7. Do not infer mechanism from a score. Inspect traces and ablate successful changes before making causal claims.
+8. Keep negative results and regressions.
+9. Avoid letting a language model judge become the only evidence. Use repeated judges, deterministic probes, transfer suites, and human review for stronger claims.
+10. The current OpenEvolve layer is a bootstrap search surface, not a claim that the final organism should be a wrapper around DUCK.
 
 Verification before committing code:
 
 `python -m unittest discover -s tests -v`
 
-For a smoke run:
+Basic DUCK phenotype run:
 
-`bicentennial --generations 5 --population 12 --episodes 100 --output runs/smoke.jsonl`
+`bicentennial-lab --duck-repo ../DUCK --suite configs/suites/training.json --state-root runs/duck-state --transcript-out runs/duck-transcript.json`
 
-When reviewing apparent progress, use the `hostile-reviewer` subagent and ask it to search for evaluator leakage, Goodharting, overfitting, untracked architectural hand-design, seed sensitivity, and lack of transfer.
+When apparent progress occurs, use the hostile reviewer to search for evaluator gaming, surface-only postprocessing, judge bias, scenario memorization, state leakage, seed sensitivity, and lack of transfer.

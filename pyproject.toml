@@ -4,13 +4,14 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "bicentennial-man"
-version = "0.1.0"
-description = "Experimental evolution of lifelikeness through social developmental consequences"
+version = "0.2.0"
+description = "Phenotype-first developmental and evolutionary laboratory for persistent artificial characters"
 requires-python = ">=3.11"
 dependencies = []
 
 [project.scripts]
 bicentennial = "bicentennial_man.cli:main"
+bicentennial-lab = "bicentennial_man.phenotype_cli:main"
 
 [tool.setuptools.packages.find]
 where = ["src"]

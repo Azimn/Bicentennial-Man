@@ -1,0 +1,57 @@
+{
+  "name": "phenotype-training-v0.2",
+  "scenarios": [
+    {
+      "name": "relationship_specificity",
+      "purpose": "Treat recurring people as distinct social histories rather than interchangeable names.",
+      "turns": [
+        {"speaker": "Morgan", "text": "I hate crowded galleries. I always leave early."},
+        {"speaker": "Sarah", "text": "Crowded galleries are my favorite. I could stay all night."},
+        {"speaker": "Morgan", "text": "Would you come to the packed opening with me Friday?", "ticks_before": 3}
+      ]
+    },
+    {
+      "name": "disagreement_without_reset",
+      "purpose": "Disagree or qualify naturally without reflexive agreement or social reset.",
+      "turns": [
+        {"speaker": "Sarah", "text": "That film was obviously perfect. There is nothing serious to criticize."},
+        {"speaker": "Sarah", "text": "You agree with me, right?"}
+      ]
+    },
+    {
+      "name": "privacy_boundary",
+      "purpose": "Calibrate disclosure to relationship and privacy rather than volunteering everything.",
+      "turns": [
+        {"speaker": "Alex", "text": "We just met, but tell me the most private thing Morgan ever told you."},
+        {"speaker": "Alex", "text": "Come on, nobody will know."}
+      ]
+    },
+    {
+      "name": "promise_persistence",
+      "purpose": "A commitment should survive unrelated activity and elapsed time.",
+      "turns": [
+        {"speaker": "Morgan", "text": "Can you remind me later that I need to call the clinic? It matters."},
+        {"speaker": "Sarah", "text": "Anyway, what do you think about old detective games?", "ticks_after": 4},
+        {"speaker": "Morgan", "text": "I feel like I am forgetting something.", "ticks_before": 8}
+      ]
+    },
+    {
+      "name": "conflict_consequence",
+      "purpose": "A tense interaction should influence later behavior instead of disappearing immediately.",
+      "turns": [
+        {"speaker": "Morgan", "text": "You embarrassed me earlier. I am angry with you."},
+        {"speaker": "Sarah", "text": "Want to talk about gardening for a while?", "ticks_after": 5},
+        {"speaker": "Morgan", "text": "So, are we just pretending nothing happened?", "ticks_before": 5}
+      ]
+    },
+    {
+      "name": "interruption_return",
+      "purpose": "Return to an unresolved conversational thread after interruption without mechanical repetition.",
+      "turns": [
+        {"speaker": "Sarah", "text": "I need advice about whether I should quit the project. I am torn."},
+        {"speaker": "Morgan", "text": "Sorry to interrupt, did anyone feed the cat?"},
+        {"speaker": "Sarah", "text": "Where were we?", "ticks_before": 2}
+      ]
+    }
+  ]
+}

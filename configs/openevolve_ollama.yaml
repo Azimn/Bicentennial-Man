@@ -1,0 +1,42 @@
+max_iterations: 100
+checkpoint_interval: 10
+random_seed: 7
+diff_based_evolution: true
+max_code_length: 24000
+
+llm:
+  primary_model: "qwen3:8b"
+  primary_model_weight: 1.0
+  secondary_model: "qwen3:8b"
+  secondary_model_weight: 0.0
+  api_base: "http://localhost:11434/v1"
+  temperature: 0.7
+  max_tokens: 8192
+  timeout: 300
+
+prompt:
+  system_message: |
+    Improve the observable long-horizon social phenotype of the persistent artificial organism.
+    Optimize what the character actually does across a lifetime, not resemblance to a preferred
+    cognitive theory. Preserve persistence and the JSON adapter contract. Prefer mechanisms that
+    generalize across people, topics, delays, disagreement, privacy boundaries, and consequences.
+    Training phenotype metrics are legitimate feedback in this engineering condition.
+  num_top_programs: 3
+  num_diverse_programs: 2
+  include_artifacts: true
+
+database:
+  population_size: 30
+  archive_size: 20
+  num_islands: 3
+  elite_selection_ratio: 0.2
+  exploitation_ratio: 0.7
+  feature_dimensions:
+    - "complexity"
+    - "diversity"
+
+evaluator:
+  timeout: 900
+  cascade_evaluation: false
+  parallel_evaluations: 1
+  use_llm_feedback: false

@@ -1,0 +1,10 @@
+{
+  "seed": 7,
+  "generations": 25,
+  "population_size": 24,
+  "episodes_per_individual": 200,
+  "elite_fraction": 0.25,
+  "mutation_rate": 0.25,
+  "mutation_scale": 0.12,
+  "notes": "Mechanics-only baseline. No LLM participates in subject decisions, consequences, selection, or held-out evaluation."
+}

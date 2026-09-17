@@ -10,7 +10,7 @@ The experiment is designed to distinguish social developmental adaptation from d
 
 ## v0.1
 
-The initial scaffold provides a deterministic Python simulation with no required dependencies, a deliberately weak founder, bounded genome mutation, lineage tracking, training and held-out social situations, an evaluator firewall, optional Ollama language rendering, OpenCode project instructions, an adversarial reviewer agent, tests, CI, and research protocol documentation.
+The initial scaffold provides a deterministic Python simulation with no required dependencies, a deliberately weak founder, bounded genome mutation, lineage tracking, deterministic checkpoint/resume support, training and held-out social situations, an evaluator firewall, optional Ollama language rendering, OpenCode project instructions, an adversarial reviewer agent, tests, CI, and research protocol documentation.
 
 The developmental genome uses substrate-neutral capacities and dynamics rather than named human faculties. It can vary trace capacity, person-specific partitioning, state carryover, unfinished-thread persistence, transition inertia, action reuse, disclosure threshold, routing sparsity, agreement, verbosity, plasticity, and exploration.
 
@@ -21,10 +21,10 @@ py -3.11 -m venv .venv
 .\.venv\Scripts\Activate.ps1
 python -m pip install -e .
 python -m unittest discover -s tests -v
-bicentennial --generations 25 --population 24 --episodes 200 --output runs\baseline-seed7.jsonl
+bicentennial --generations 25 --population 24 --episodes 200 --output runs\baseline-seed7.jsonl --checkpoint checkpoints\latest.json
 ```
 
-See `docs/EXPERIMENT_PROTOCOL.md` before interpreting results. See `docs/LOCAL_RUN.md` for OpenCode and Ollama notes.
+See `docs/EXPERIMENT_PROTOCOL.md` before interpreting results. See `docs/LOCAL_RUN.md` for OpenCode and Ollama notes, and `docs/RECOVERY.md` for checkpoint/resume and Git backup.
 
 ## Research discipline
 

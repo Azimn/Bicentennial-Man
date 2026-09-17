@@ -1,8 +1,10 @@
 import random
+from pathlib import Path
+import tempfile
 import unittest
 
 from bicentennial_man.evaluator import evaluate_held_out
-from bicentennial_man.evolution import evolve, train_score
+from bicentennial_man.evolution import evolve, load_checkpoint, train_score
 from bicentennial_man.genome import DevelopmentalGenome
 from bicentennial_man.subject import Subject
 from bicentennial_man.world import SocialEcology, TRAINING_SITUATIONS
@@ -40,6 +42,34 @@ class GenomeTests(unittest.TestCase):
         best = evolve(seed=5, generations=3, population_size=8, episodes=30)
         self.assertIsNotNone(best.held_out)
         self.assertTrue(best.individual_id.startswith("g"))
+
+    def test_checkpoint_resume_matches_uninterrupted_run(self):
+        with tempfile.TemporaryDirectory() as temp_dir:
+            checkpoint = Path(temp_dir) / "latest.json"
+            evolve(
+                seed=11,
+                generations=3,
+                population_size=8,
+                episodes=30,
+                checkpoint=checkpoint,
+            )
+            saved = load_checkpoint(checkpoint)
+            self.assertEqual(saved["completed_generations"], 3)
+
+            resumed = evolve(
+                seed=11,
+                generations=6,
+                population_size=8,
+                episodes=30,
+                checkpoint=checkpoint,
+                resume=checkpoint,
+            )
+            uninterrupted = evolve(seed=11, generations=6, population_size=8, episodes=30)
+
+            self.assertEqual(resumed.individual_id, uninterrupted.individual_id)
+            self.assertEqual(resumed.genome.to_dict(), uninterrupted.genome.to_dict())
+            self.assertEqual(resumed.training_score, uninterrupted.training_score)
+            self.assertEqual(resumed.held_out, uninterrupted.held_out)
 
 
 if __name__ == "__main__":

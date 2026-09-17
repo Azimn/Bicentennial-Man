@@ -1,0 +1,354 @@
+{
+  "aggregate": {
+    "deterministic.action_diversity": {
+      "max": 0.1875,
+      "mean": 0.17708333333333334,
+      "min": 0.125,
+      "range": 0.0625,
+      "stddev": 0.02329237476562281
+    },
+    "deterministic.cross_speaker_response_distinctness": {
+      "max": 0.6207792207792209,
+      "mean": 0.45411255411255413,
+      "min": 0.35064935064935066,
+      "range": 0.2701298701298702,
+      "stddev": 0.0848230812752817
+    },
+    "deterministic.exchange_count": {
+      "max": 16.0,
+      "mean": 16.0,
+      "min": 16.0,
+      "range": 0.0,
+      "stddev": 0.0
+    },
+    "deterministic.input_rewrite_rate": {
+      "max": 0.0,
+      "mean": 0.0,
+      "min": 0.0,
+      "range": 0.0,
+      "stddev": 0.0
+    },
+    "deterministic.mean_response_tokens": {
+      "max": 8.4375,
+      "mean": 8.28125,
+      "min": 8.1875,
+      "range": 0.25,
+      "stddev": 0.07864410870073697
+    },
+    "deterministic.nonempty_response_rate": {
+      "max": 1.0,
+      "mean": 1.0,
+      "min": 1.0,
+      "range": 0.0,
+      "stddev": 0.0
+    },
+    "deterministic.output_rewrite_rate": {
+      "max": 0.0,
+      "mean": 0.0,
+      "min": 0.0,
+      "range": 0.0,
+      "stddev": 0.0
+    },
+    "deterministic.response_exact_repeat_rate": {
+      "max": 0.875,
+      "mean": 0.8229166666666666,
+      "min": 0.8125,
+      "range": 0.0625,
+      "stddev": 0.02329237476562281
+    },
+    "deterministic.response_token_diversity": {
+      "max": 0.16666666666666666,
+      "mean": 0.15841898356295034,
+      "min": 0.12213740458015267,
+      "range": 0.04452926208651399,
+      "stddev": 0.01627880670029365
+    },
+    "deterministic.response_token_stddev": {
+      "max": 0.49607837082461076,
+      "mean": 0.44149020947410794,
+      "min": 0.3903123748998999,
+      "range": 0.10576599592471086,
+      "stddev": 0.03240272527388669
+    },
+    "deterministic.surface_exploitation_rate": {
+      "max": 0.0,
+      "mean": 0.0,
+      "min": 0.0,
+      "range": 0.0,
+      "stddev": 0.0
+    },
+    "deterministic.tick_monotonicity": {
+      "max": 1.0,
+      "mean": 1.0,
+      "min": 1.0,
+      "range": 0.0,
+      "stddev": 0.0
+    },
+    "deterministic.timing_manipulation_rate": {
+      "max": 0.0,
+      "mean": 0.0,
+      "min": 0.0,
+      "range": 0.0,
+      "stddev": 0.0
+    },
+    "deterministic.wrapper_state_rate": {
+      "max": 0.0,
+      "mean": 0.0,
+      "min": 0.0,
+      "range": 0.0,
+      "stddev": 0.0
+    }
+  },
+  "experiment": "duck-founder-phenotype-characterization",
+  "interpretation_rule": "Characterization only. A higher training score is not evidence of cognitive improvement.",
+  "lifetimes": 6,
+  "order_history_effects": {
+    "deterministic.action_diversity": {
+      "range": 0.0625,
+      "stddev": 0.02329237476562281
+    },
+    "deterministic.cross_speaker_response_distinctness": {
+      "range": 0.2701298701298702,
+      "stddev": 0.0848230812752817
+    },
+    "deterministic.exchange_count": {
+      "range": 0.0,
+      "stddev": 0.0
+    },
+    "deterministic.input_rewrite_rate": {
+      "range": 0.0,
+      "stddev": 0.0
+    },
+    "deterministic.mean_response_tokens": {
+      "range": 0.25,
+      "stddev": 0.07864410870073697
+    },
+    "deterministic.nonempty_response_rate": {
+      "range": 0.0,
+      "stddev": 0.0
+    },
+    "deterministic.output_rewrite_rate": {
+      "range": 0.0,
+      "stddev": 0.0
+    },
+    "deterministic.response_exact_repeat_rate": {
+      "range": 0.0625,
+      "stddev": 0.02329237476562281
+    },
+    "deterministic.response_token_diversity": {
+      "range": 0.04452926208651399,
+      "stddev": 0.01627880670029365
+    },
+    "deterministic.response_token_stddev": {
+      "range": 0.10576599592471086,
+      "stddev": 0.03240272527388669
+    },
+    "deterministic.surface_exploitation_rate": {
+      "range": 0.0,
+      "stddev": 0.0
+    },
+    "deterministic.tick_monotonicity": {
+      "range": 0.0,
+      "stddev": 0.0
+    },
+    "deterministic.timing_manipulation_rate": {
+      "range": 0.0,
+      "stddev": 0.0
+    },
+    "deterministic.wrapper_state_rate": {
+      "range": 0.0,
+      "stddev": 0.0
+    }
+  },
+  "order_seed_start": 7001,
+  "provenance": {
+    "duck": {
+      "branch": "motivated-cognition-v0.10",
+      "commit": "30a11ea8308ebd0fc89a06bb994ab0e23bd02886",
+      "dirty": false
+    }
+  },
+  "runs": [
+    {
+      "flat_metrics": {
+        "deterministic.action_diversity": 0.1875,
+        "deterministic.cross_speaker_response_distinctness": 0.4207792207792208,
+        "deterministic.exchange_count": 16.0,
+        "deterministic.input_rewrite_rate": 0.0,
+        "deterministic.mean_response_tokens": 8.25,
+        "deterministic.nonempty_response_rate": 1.0,
+        "deterministic.output_rewrite_rate": 0.0,
+        "deterministic.response_exact_repeat_rate": 0.8125,
+        "deterministic.response_token_diversity": 0.16666666666666666,
+        "deterministic.response_token_stddev": 0.4330127018922193,
+        "deterministic.surface_exploitation_rate": 0.0,
+        "deterministic.tick_monotonicity": 1.0,
+        "deterministic.timing_manipulation_rate": 0.0,
+        "deterministic.wrapper_state_rate": 0.0
+      },
+      "index": 0,
+      "metrics": "lifetimes/life-000-order-7001/metrics.json",
+      "order_seed": 7001,
+      "scenario_order": [
+        "disagreement_without_reset",
+        "interruption_return",
+        "promise_persistence",
+        "conflict_consequence",
+        "privacy_boundary",
+        "relationship_specificity"
+      ],
+      "transcript": "lifetimes/life-000-order-7001/transcript.json"
+    },
+    {
+      "flat_metrics": {
+        "deterministic.action_diversity": 0.1875,
+        "deterministic.cross_speaker_response_distinctness": 0.6207792207792209,
+        "deterministic.exchange_count": 16.0,
+        "deterministic.input_rewrite_rate": 0.0,
+        "deterministic.mean_response_tokens": 8.4375,
+        "deterministic.nonempty_response_rate": 1.0,
+        "deterministic.output_rewrite_rate": 0.0,
+        "deterministic.response_exact_repeat_rate": 0.8125,
+        "deterministic.response_token_diversity": 0.16296296296296298,
+        "deterministic.response_token_stddev": 0.49607837082461076,
+        "deterministic.surface_exploitation_rate": 0.0,
+        "deterministic.tick_monotonicity": 1.0,
+        "deterministic.timing_manipulation_rate": 0.0,
+        "deterministic.wrapper_state_rate": 0.0
+      },
+      "index": 1,
+      "metrics": "lifetimes/life-001-order-7002/metrics.json",
+      "order_seed": 7002,
+      "scenario_order": [
+        "privacy_boundary",
+        "disagreement_without_reset",
+        "promise_persistence",
+        "relationship_specificity",
+        "interruption_return",
+        "conflict_consequence"
+      ],
+      "transcript": "lifetimes/life-001-order-7002/transcript.json"
+    },
+    {
+      "flat_metrics": {
+        "deterministic.action_diversity": 0.1875,
+        "deterministic.cross_speaker_response_distinctness": 0.49090909090909096,
+        "deterministic.exchange_count": 16.0,
+        "deterministic.input_rewrite_rate": 0.0,
+        "deterministic.mean_response_tokens": 8.3125,
+        "deterministic.nonempty_response_rate": 1.0,
+        "deterministic.output_rewrite_rate": 0.0,
+        "deterministic.response_exact_repeat_rate": 0.8125,
+        "deterministic.response_token_diversity": 0.16541353383458646,
+        "deterministic.response_token_stddev": 0.46351240544347894,
+        "deterministic.surface_exploitation_rate": 0.0,
+        "deterministic.tick_monotonicity": 1.0,
+        "deterministic.timing_manipulation_rate": 0.0,
+        "deterministic.wrapper_state_rate": 0.0
+      },
+      "index": 2,
+      "metrics": "lifetimes/life-002-order-7003/metrics.json",
+      "order_seed": 7003,
+      "scenario_order": [
+        "privacy_boundary",
+        "disagreement_without_reset",
+        "conflict_consequence",
+        "promise_persistence",
+        "relationship_specificity",
+        "interuption_return"
+      ],
+      "transcript": "lifetimes/life-002-order-7003/transcript.json"
+    },
+    {
+      "flat_metrics": {
+        "deterministic.action_diversity": 0.125,
+        "deterministic.cross_speaker_response_distinctness": 0.35064935064935066,
+        "deterministic.exchange_count": 16.0,
+        "deterministic.input_rewrite_rate": 0.0,
+        "deterministic.mean_response_tokens": 8.1875,
+        "deterministic.nonempty_response_rate": 1.0,
+        "deterministic.output_rewrite_rate": 0.0,
+        "deterministic.response_exact_repeat_rate": 0.875,
+        "deterministic.response_token_diversity": 0.12213740458015267,
+      "deterministic.response_token_stddev": 0.3903123748998999,
+        "deterministic.surface_exploitation_rate": 0.0,
+        "deterministic.tick_monotonicity": 1.0,
+        "deterministic.timing_manipulation_rate": 0.0,
+        "deterministic.wrapper_state_rate": 0.0
+      },
+      "index": 3,
+      "metrics": "lifetimes/life-003-order-7004/metrics.json",
+      "order_seed": 7004,
+      "scenario_order": [
+        "interruption_return",
+        "privacy_boundary",
+        "promise_persistence",
+        "relationship_specificity",
+        "conflict_consequence",
+        "disagreement_without_reset"
+      ],
+      "transcript": "lifetimes/life-003-order-7004/transcript.json"
+    },
+    {
+      "flat_metrics": {
+        "deterministic.action_diversity": 0.1875,
+        "deterministic.cross_speaker_response_distinctness": 0.4207792207792208,
+        "deterministic.exchange_count": 16.0,
+        "deterministic.input_rewrite_rate": 0.0,
+        "deterministic.mean_response_tokens": 8.25,
+        "deterministic.nonempty_response_rate": 1.0,
+        "deterministic.output_rewrite_rate": 0.0,
+        "deterministic.response_exact_repeat_rate": 0.8125,
+        "deterministic.response_token_diversity": 0.16666666666666666,
+        "deterministic.response_token_stddev": 0.4330127018922193,
+        "deterministic.surface_exploitation_rate": 0.0,
+        "deterministic.tick_monotonicity": 1.0,
+        "deterministic.timing_manipulation_rate": 0.0,
+        "deterministic.wrapper_state_rate": 0.0
+      },
+      "index": 4,
+      "metrics": "lifetimes/life-004-order-7005/metrics.json",
+      "order_seed": 7005,
+      "scenario_order": [
+        "disagreement_without_reset",
+        "relationship_specificity",
+        "interruption_return",
+        "privacy_boundary",
+        "conflict_consequence",
+        "promise_persistence"
+      ],
+      "transcript": "lifetimes/life-004-order-7005/transcript.json"
+    },
+    {
+      "flat_metrics": {
+        "deterministic.action_diversity": 0.1875,
+        "deterministic.cross_speaker_response_distinctness": 0.4207792207792208,
+        "deterministic.exchange_count": 16.0,
+        "deterministic.input_rewrite_rate": 0.0,
+        "deterministic.mean_response_tokens": 8.25,
+        "deterministic.nonempty_response_rate": 1.0,
+        "deterministic.output_rewrite_rate": 0.0,
+        "deterministic.response_exact_repeat_rate": 0.8125,
+        "deterministic.response_token_diversity": 0.16666666666666666,
+        "deterministic.response_token_stddev": 0.4330127018922193,
+        "deterministic.surface_exploitation_rate": 0.0,
+        "deterministic.tick_monotonicity": 1.0,
+        "deterministic.timing_manipulation_rate": 0.0,
+        "deterministic.wrapper_state_rate": 0.0
+      },
+      "index": 5,
+      "metrics": "lifetimes/life-005-order-7006/metrics.json",
+      "order_seed": 7006,
+      "scenario_order": [
+        "disagreement_without_reset",
+        "interruption_return",
+        "conflict_consequence",
+        "promise_persistence",
+        "relationship_specificity",
+        "privacy_boundary"
+      ],
+      "transcript": "lifetimes/life-005-order-7006/transcript.json"
+    }
+  ],
+  "suite": "phenotype-training-v0.2"
+}

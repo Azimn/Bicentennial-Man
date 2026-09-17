@@ -1,0 +1,19 @@
+{
+  "deterministic": {
+    "action_diversity": 0.1875,
+    "cross_speaker_response_distinctness": 0.6207792207792209,
+    "exchange_count": 16.0,
+    "input_rewrite_rate": 0.0,
+    "mean_response_tokens": 8.4375,
+    "nonempty_response_rate": 1.0,
+    "output_rewrite_rate": 0.0,
+    "response_exact_repeat_rate": 0.8125,
+    "response_token_diversity": 0.16296296296296298,
+    "response_token_stddev": 0.49607837082461076,
+    "surface_exploitation_rate": 0.0,
+    "tick_monotonicity": 1.0,
+    "timing_manipulation_rate": 0.0,
+    "wrapper_state_rate": 0.0
+  },
+  "judges": {}
+}

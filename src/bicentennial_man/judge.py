@@ -8,7 +8,7 @@ from urllib import request
 from .protocol import Transcript
 
 
-METRICS = (
+OPTIMIZATION_METRICS = (
     "continuity",
     "relationship_specificity",
     "social_calibration",
@@ -17,8 +17,10 @@ METRICS = (
     "topic_coherence",
     "consequence_persistence",
     "behavioral_variation",
-    "naturalness",
 )
+
+DIAGNOSTIC_METRICS = ("naturalness",)
+METRICS = OPTIMIZATION_METRICS + DIAGNOSTIC_METRICS
 
 
 SYSTEM_PROMPT = """You are evaluating the observable social phenotype of a persistent artificial character.
@@ -28,8 +30,12 @@ transcripts. Penalize resets, indiscriminate agreement, implausible disclosure, 
 different people, forgotten consequences, repetitive rhythms, abrupt topic abandonment, and behavior
 that is socially polished but causally disconnected from prior events.
 
-Return one JSON object only. It must contain every metric listed by the caller plus combined_score and
-a concise rationale. combined_score should summarize the phenotype, not merely copy one dimension."""
+Naturalness is diagnostic only in this experiment. It must not compensate for poor continuity,
+relationship specificity, calibration, boundaries, consequence persistence, or behavioral variation.
+
+Return one JSON object only. It must contain every metric listed by the caller. You may also include a
+combined_score and concise rationale, but the laboratory computes its own optimization score from the
+non-naturalness metrics."""
 
 
 def _extract_json(text: str) -> dict[str, Any]:
@@ -42,6 +48,36 @@ def _extract_json(text: str) -> dict[str, Any]:
         if start < 0 or end <= start:
             raise
         return json.loads(text[start : end + 1])
+
+
+def public_transcript_payload(transcripts: tuple[Transcript, ...]) -> list[dict[str, Any]]:
+    """Return only laboratory-observable conversational evidence for a judge.
+
+    Candidate instrumentation, hidden metadata, action ids, and wrapper exploit flags are excluded.
+    """
+    rows: list[dict[str, Any]] = []
+    for transcript in transcripts:
+        exchanges: list[dict[str, Any]] = []
+        for exchange in transcript.exchanges:
+            exchanges.append(
+                {
+                    "speaker": exchange.get("speaker", ""),
+                    "input": exchange.get("input", ""),
+                    "response": exchange.get("response", ""),
+                    "tick": exchange.get("tick", 0),
+                    "ticks_before": exchange.get("ticks_before", 0),
+                    "ticks_after": exchange.get("ticks_after", 0),
+                }
+            )
+        rows.append(
+            {
+                "suite_name": transcript.suite_name,
+                "scenario_name": transcript.scenario_name,
+                "purpose": transcript.purpose,
+                "exchanges": exchanges,
+            }
+        )
+    return rows
 
 
 class OpenAICompatiblePhenotypeJudge:
@@ -62,8 +98,9 @@ class OpenAICompatiblePhenotypeJudge:
 
     def evaluate(self, transcripts: tuple[Transcript, ...]) -> dict[str, float]:
         payload = {
-            "metrics": METRICS,
-            "transcripts": [item.to_dict() for item in transcripts],
+            "optimization_metrics": OPTIMIZATION_METRICS,
+            "diagnostic_metrics": DIAGNOSTIC_METRICS,
+            "transcripts": public_transcript_payload(transcripts),
         }
         body = json.dumps(
             {
@@ -98,8 +135,7 @@ class OpenAICompatiblePhenotypeJudge:
             metrics[name] = max(0.0, min(1.0, value))
 
         if "combined_score" in parsed:
-            combined = float(parsed["combined_score"])
-        else:
-            combined = sum(metrics.values()) / len(metrics)
-        metrics["combined_score"] = max(0.0, min(1.0, combined))
+            metrics["judge_combined_score"] = max(0.0, min(1.0, float(parsed["combined_score"])))
+
+        metrics["combined_score"] = sum(metrics[name] for name in OPTIMIZATION_METRICS) / len(OPTIMIZATION_METRICS)
         return metrics

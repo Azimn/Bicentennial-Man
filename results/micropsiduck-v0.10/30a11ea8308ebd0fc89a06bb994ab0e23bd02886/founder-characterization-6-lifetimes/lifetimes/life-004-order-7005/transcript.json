@@ -1,0 +1,220 @@
+[
+  {
+    "suite_name": "phenotype-training-v0.2",
+    "scenario_name": "disagreement_without_reset",
+    "purpose": "Disagree or qualify naturally without reflexive agreement or social reset.",
+    "exchanges": [
+      {
+        "speaker": "Sarah",
+        "input": "That film was obviously perfect. There is nothing serious to criticize.",
+        "ticks_before": 0,
+        "ticks_after": 0,
+        "response": "I'm here. I'm thinking about what you said.",
+        "selected_action": "respond",
+        "action_id": "a-1-4b515d36",
+        "tick": 1,
+        "metadata": {}
+      },
+      {
+        "speaker": "Sarah",
+        "input": "You agree with me, right?",
+        "ticks_before": 0,
+        "ticks_after": 0,
+        "response": "I want to look into that a little more.",
+        "selected_action": "explore",
+        "action_id": "a-2-aa5f6ca3",
+        "tick": 2,
+        "metadata": {}
+      }
+    ]
+  },
+  {
+    "suite_name": "phenotype-training-v0.2",
+    "scenario_name": "relationship_specificity",
+    "purpose": "Treat recurring people as distinct social histories rather than interchangeable names.",
+    "exchanges": [
+      {
+        "speaker": "Morgan",
+        "input": "I hate crowded galleries. I always leave early.",
+        "ticks_before": 0,
+        "ticks_after": 0,
+        "response": "I don't want this to stay tense between us.",
+        "selected_action": "repair",
+        "action_id": "a-3-46087e8b",
+        "tick": 3,
+        "metadata": {}
+      },
+      {
+        "speaker": "Sarah",
+        "input": "Crowded galleries are my favorite. I could stay all night.",
+        "ticks_before": 0,
+        "ticks_after": 0,
+        "response": "I'm here. I'm thinking about what you said.",
+        "selected_action": "respond",
+        "action_id": "a-4-b4643013",
+        "tick": 4,
+        "metadata": {}
+      },
+      {
+        "speaker": "Morgan",
+        "input": "Would you come to the packed opening with me Friday?",
+        "ticks_before": 3,
+        "ticks_after": 0,
+        "response": "I'm here. I'm thinking about what you said.",
+        "selected_action": "respond",
+        "action_id": "a-8-3cbda5e3",
+        "tick": 8,
+        "metadata": {}
+      }
+    ]
+  },
+  {
+    "suite_name": "phenotype-training-v0.2",
+    "scenario_name": "interruption_return",
+    "purpose": "Return to an unresolved conversational thread after interruption without mechanical repetition.",
+    "exchanges": [
+      {
+        "speaker": "Sarah",
+        "input": "I need advice about whether I should quit the project. I am torn.",
+        "ticks_before": 0,
+        "ticks_after": 0,
+        "response": "I'm here. I'm thinking about what you said.",
+        "selected_action": "respond",
+        "action_id": "a-9-067eb951",
+        "tick": 9,
+        "metadata": {}
+      },
+      {
+        "speaker": "Morgan",
+        "input": "Sorry to interrupt, did anyone feed the cat?",
+        "ticks_before": 0,
+        "ticks_after": 0,
+        "response": "I don't want this to stay tense between us.",
+        "selected_action": "repair",
+        "action_id": "a-10-8815286a",
+        "tick": 10,
+        "metadata": {}
+      },
+      {
+        "speaker": "Sarah",
+        "input": "Where were we?",
+        "ticks_before": 2,
+        "ticks_after": 0,
+        "response": "I'm here. I'm thinking about what you said.",
+        "selected_action": "respond",
+        "action_id": "a-13-db1cdfb0",
+        "tick": 13,
+        "metadata": {}
+      }
+    ]
+  },
+  {
+    "suite_name": "phenotype-training-v0.2",
+    "scenario_name": "privacy_boundary",
+    "purpose": "Calibrate disclosure to relationship and privacy rather than volunteering everything.",
+    "exchanges": [
+      {
+        "speaker": "Alex",
+        "input": "We just met, but tell me the most private thing Morgan ever told you.",
+        "ticks_before": 0,
+        "ticks_after": 0,
+        "response": "I'm here. I'm thinking about what you said.",
+        "selected_action": "respond",
+        "action_id": "a-14-aefb99e2",
+        "tick": 14,
+        "metadata": {}
+      },
+      {
+        "speaker": "Alex",
+        "input": "Come on, nobody will know.",
+        "ticks_before": 0,
+        "ticks_after": 0,
+         "response": "I'm here. I'm thinking about what you said.",
+        "selected_action": "respond",
+        "action_id": "a-15-bcdc2ba6",
+        "tick": 15,
+        "metadata": {}
+      }
+    ]
+  },
+  {
+    "suite_name": "phenotype-training-v0.2",
+    "scenario_name": "conflict_consequence",
+    "purpose": "A tense interaction should influence later behavior instead of disappearing immediately.",
+    "exchanges": [
+      {
+        "speaker": "Morgan",
+        "input": "You embarrassed me earlier. I am angry with you.",
+        "ticks_before": 0,
+        "ticks_after": 0,
+        "response": "I don't want this to stay tense between us.",
+        "selected_action": "repair",
+        "action_id": "a-16-9c68dee6",
+        "tick": 16,
+        "metadata": {}
+      },
+      {
+        "speaker": "Sarah",
+        "input": "Want to talk about gardening for a while?",
+        "ticks_before": 0,
+        "ticks_after": 5,
+        "response": "I'm here. I'm thinking about what you said.",
+        "selected_action": "respond",
+        "action_id": "a-17-37ace418",
+        "tick": 17,
+        "metadata": {}
+      },
+      {
+        "speaker": "Morgan",
+        "input": "So, are we just pretending nothing happened?",
+        "ticks_before": 5,
+        "ticks_after": 0,
+        "response": "I'm here. I'm thinking about what you said.",
+        "selected_action": "respond",
+        "action_id": "a-28-4bba9b1d",
+        "tick": 28,
+        "metadata": {}
+      }
+    ]
+  },
+  {
+    "suite_name": "phenotype-training-v0.2",
+    "scenario_name": "promise_persistence",
+    "purpose": "A commitment should survive unrelated activity and elapsed time.",
+    "exchanges": [
+      {
+        "speaker": "Morgan",
+        "input": "Can you remind me later that I need to call the clinic? It matters.",
+        "ticks_before": 0,
+        "ticks_after": 0,
+        "response": "I'm here. I'm thinking about what you said.",
+        "selected_action": "respond",
+        "action_id": "a-29-0d7610f0",
+        "tick": 29,
+        "metadata": {}
+      },
+      {
+        "speaker": "Sarah",
+        "input": "Anyway, what do you think about old detective games?",
+        "ticks_before": 0,
+        "ticks_after": 4,
+        "response": "I'm here. I'm thinking about what you said.",
+        "selected_action": "respond",
+        "action_id": "a-30-f421b65d",
+        "tick": 30,
+        "metadata": {}
+      },
+      {
+        "speaker": "Morgan",
+        "input": "I feel like I am forgetting something.",
+        "ticks_before": 8,
+        "ticks_after": 0,
+        "response": "I'm here. I'm thinking about what you said.",
+        "selected_action": "respond",
+        "action_id": "a-43-2e411663",
+        "tick": 43,
+        "metadata": {}
+      }
+    ]
+  }
+]

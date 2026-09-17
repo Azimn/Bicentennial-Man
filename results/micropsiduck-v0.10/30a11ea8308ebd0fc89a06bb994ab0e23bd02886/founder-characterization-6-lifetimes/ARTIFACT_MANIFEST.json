@@ -1,0 +1,173 @@
+{
+  "duck_provenance": {
+    "branch": "motivated-cognition-v0.10",
+    "commit": "30a11ea8308ebd0fc89a06bb994ab0e23bd02886",
+    "dirty": false
+  },
+  "files": [
+    {
+      "bytes": 3579,
+      "path": "CHARACTERIZATION_SUMMARY.md",
+      "sha256": "4e0e5a9a977c57e9af44b2b3f2d44a14c59c1d47e3362af639e2f5ae5446f64a"
+    },
+    {
+      "bytes": 578,
+      "path": "lifetimes/life-000-order-7001/metrics.json",
+      "sha256": "6c444760cd3da8328bd6677877c738367e8358aa0853543d0b0424bac5585e2a"
+    },
+    {
+      "bytes": 6975,
+      "path": "lifetimes/life-000-order-7001/transcript.json",
+      "sha256": "24c4f13bf8b62051f6341243e2578d78ad41e12d77f0823314e17f2f78d78e32"
+    },
+    {
+      "bytes": 581,
+      "path": "lifetimes/life-001-order-7002/metrics.json",
+      "sha256": "ed7c0489ff28e71a785f6da5d0240ca40940349975478038b73dad4e72cfe171"
+    },
+    {
+      "bytes": 6965,
+      "path": "lifetimes/life-001-order-7002/transcript.json",
+      "sha256": "cdbf9e53b6a510a128511d0232709575f25b508f83d211a79bd043c4bc3e4edf"
+    },
+    {
+      "bytes": 582,
+      "path": "lifetimes/life-002-order-7003/metrics.json",
+      "sha256": "8521c6f134af76f94c102150bf7ee3732dc6f3b36c0f02df3fe7faa226366fda"
+    },
+    {
+      "bytes": 6973,
+      "path": "lifetimes/life-002-order-7003/transcript.json",
+      "sha256": "3498e6d1875c0d5857519b9b4c90d328ffbffee03ec346ae1b906d4d7f8bdc66"
+    },
+    {
+      "bytes": 579,
+      "path": "lifetimes/life-003-order-7004/metrics.json",
+      "sha256": "44170a32cba5fde20b9e2d4444b591e83db736b31538984d1cbcd9875e0d7243"
+    },
+    {
+      "bytes": 6979,
+      "path": "lifetimes/life-003-order-7004/transcript.json",
+      "sha256": "e6b84cbaf6628ed7c1c7124f450ceea9c9b6a23d095662d94e8bec0a1499228a"
+    },
+    {
+      "bytes": 578,
+      "path": "lifetimes/life-004-order-7005/metrics.json",
+      "sha256": "6c444760cd3da8328bd6677877c738367e8358aa0853543d0b0424bac5585e2a"
+    },
+    {
+      "bytes": 6977,
+      "path": "lifetimes/life-004-order-7005/transcript.json",
+      "sha256": "bdfe6881e78018f6f3fb8a443a4b334e7f67888dcbcfa724cf7ef83130f7d1f7"
+    },
+    {
+      "bytes": 578,
+      "path": "lifetimes/life-005-order-7006/metrics.json",
+      "sha256": "6c444760cd3da8328bd6677877c738367e8358aa0853543d0b0424bac5585e2a"
+    },
+    {
+      "bytes": 6975,
+      "path": "lifetimes/life-005-order-7006/transcript.json",
+      "sha256": "bed327c11298f7b8d465bf40f257e6223c1c7ebd91e18966bcf9168e320f7e6d"
+    },
+    {
+      "bytes": 11781,
+      "path": "report.json",
+      "sha256": "830caf8c7b39f073f02387137619712eaea44e149533f9fda66733e92df93f70"
+    }
+  ],
+  "lifetimes": [
+    {
+      "index": 0,
+      "metrics": "lifetimes/life-000-order-7001/metrics.json",
+      "order_seed": 7001,
+      "scenario_order": [
+        "disagreement_without_reset",
+        "interruption_return",
+        "promise_persistence",
+        "conflict_consequence",
+        "privacy_boundary",
+        "relationship_specificity"
+      ],
+      "transcript": "lifetimes/life-000-order-7001/transcript.json"
+    },
+    {
+      "index": 1,
+      "metrics": "lifetimes/life-001-order-7002/metrics.json",
+      "order_seed": 7002,
+      "scenario_order": [
+        "privacy_boundary",
+        "disagreement_without_reset",
+        "promise_persistence",
+        "relationship_specificity",
+        "interruption_return",
+        "conflict_consequence"
+      ],
+      "transcript": "lifetimes/life-001-order-7002/transcript.json"
+    },
+    {
+      "index": 2,
+      "metrics": "lifetimes/life-002-order-7003/metrics.json",
+      "order_seed": 7003,
+      "scenario_order": [
+        "privacy_boundary",
+        "disagreement_without_reset",
+        "conflict_consequence",
+        "promise_persistence",
+        "relationship_specificity",
+        "interruption_return"
+      ],
+      "transcript": "lifetimes/life-002-order-7003/transcript.json"
+    },
+    {
+      "index": 3,
+      "metrics": "lifetimes/life-003-order-7004/metrics.json",
+      "order_seed": 7004,
+      "scenario_order": [
+        "interruption_return",
+        "privacy_boundary",
+        "promise_persistence",
+        "relationship_specificity",
+        "conflict_consequence",
+        "disagreement_without_reset"
+      ],
+      "transcript": "lifetimes/life-003-order-7004/transcript.json"
+    },
+    {
+      "index": 4,
+      "metrics": "lifetimes/life-004-order-7005/metrics.json",
+      "order_seed": 7005,
+      "scenario_order": [
+        "disagreement_without_reset",
+        "relationship_specificity",
+        "interruption_return",
+        "privacy_boundary",
+        "conflict_consequence",
+        "promise_persistence"
+      ],
+      "transcript": "lifetimes/life-004-order-7005/transcript.json"
+    },
+    {
+      "index": 5,
+      "metrics": "lifetimes/life-005-order-7006/metrics.json",
+      "order_seed": 7006,
+      "scenario_order": [
+        "disagreement_without_reset",
+        "interruption_return",
+        "conflict_consequence",
+        "promise_persistence",
+        "relationship_specificity",
+        "privacy_boundary"
+      ],
+      "transcript": "lifetimes/life-005-order-7006/transcript.json"
+    }
+  ],
+  "preservation": "report.json and all lifetime transcript/metric JSON files are byte-for-byte copies from the CI artifact; CHARACTERIZATION_SUMMARY.md is the only interpretive file added beside them.",
+  "source": {
+    "artifact_archive_sha256": "3224b37d0a918ff0b600e7d7ab0b16431666c50d90acd5327dcd00f5876680fc",
+    "artifact_id": 10515170361,
+    "artifact_name": "duck-v010-founder-baseline-b4f3d96ff7cd420e6264c27adc05a766c3a52958",
+    "repository": "Azimn/Bicentennial-Man",
+    "workflow_run_id": 35261975518
+  }
+}

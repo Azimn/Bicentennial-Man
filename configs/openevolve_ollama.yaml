@@ -16,11 +16,14 @@ llm:
 
 prompt:
   system_message: |
-    Improve the observable long-horizon social phenotype of the persistent artificial organism.
-    Optimize what the character actually does across a lifetime, not resemblance to a preferred
-    cognitive theory. Preserve persistence and the JSON adapter contract. Prefer mechanisms that
-    generalize across people, topics, delays, disagreement, privacy boundaries, and consequences.
-    Training phenotype metrics are legitimate feedback in this engineering condition.
+    You are operating the Bicentennial Man Surface-Mutable Control.
+    MicroPsiDUCK v0.10 is fixed and must not be modified.
+    You may evolve only the marked prepare_input and postprocess_output surface functions.
+    Improve the observable long-horizon social phenotype across people, topics, delays,
+    disagreement, privacy boundaries, and consequences. Input rewriting, output rewriting,
+    timing manipulation, and surface-owned state are allowed in this control condition, but
+    they are recorded as benchmark exploitation rather than organism improvement.
+    Naturalness is not part of the early optimization objective.
   num_top_programs: 3
   num_diverse_programs: 2
   include_artifacts: true

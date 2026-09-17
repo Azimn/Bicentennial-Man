@@ -1,24 +1,31 @@
-# OpenEvolve Integration
+# OpenEvolve Surface-Mutable Control
 
-OpenEvolve is used as the first local code-evolution engine rather than rebuilding an archive, island model, diff mutation system, and checkpoint machinery inside Bicentennial Man.
+The OpenEvolve experiment is currently a control, not a DUCK mutation experiment.
 
-The first target is deliberately small: `evolution/initial_program.py` is an organism-side layer around DUCK. OpenEvolve can mutate only the marked evolve block. This proves the phenotype optimization loop while leaving the lab fixed.
+`evolution/initial_program.py` contains the only evolve block. The generated candidate is a pre/post interaction transformer. DUCK source is not mounted into the candidate container and cannot be changed by the candidate.
 
-Install OpenEvolve separately:
+The trusted evaluator runs the candidate in Docker with no network, a read-only root filesystem, a read-only candidate mount, and one writable surface-state mount. The trusted host then invokes unmodified MicroPsiDUCK v0.10 separately. The candidate receives only explicit prepare and postprocess payloads.
+
+This layout intentionally exposes evaluator vulnerability. OpenEvolve may discover input rewriting, output rewriting, timing manipulation, prompt recognition, or wrapper-owned state that improves the training phenotype. Those gains are control results and should be recorded as benchmark exploitation.
+
+## Local requirements
+
+Docker must be available for candidate execution. Unsafe direct execution of generated candidates is not the default path.
+
+Ollama can supply the mutation model and the inexpensive training judge through its OpenAI-compatible endpoint at `http://localhost:11434/v1`.
+
+Typical environment variables are:
 
 ```powershell
-python -m pip install openevolve
-$env:OPENAI_API_KEY="ollama"
-$env:DUCK_REPO="..\DUCK"
-$env:BICENTENNIAL_JUDGE_MODEL="qwen3:8b"
+$env:DUCK_REPO = "..\DUCK"
+$env:BICENTENNIAL_JUDGE_MODEL = "qwen3:8b"
+$env:BICENTENNIAL_JUDGE_API_BASE = "http://localhost:11434/v1"
+$env:BICENTENNIAL_SURFACE_LIFETIMES = "3"
+$env:BICENTENNIAL_ORDER_SEED = "9101"
 ```
 
-Then run:
+Use `configs/openevolve_ollama.yaml` with `evolution/initial_program.py` and `evolution/evaluator.py` according to the installed OpenEvolve CLI version.
 
-```powershell
-openevolve-run.py evolution\initial_program.py evolution\evaluator.py --config configs\openevolve_ollama.yaml --iterations 100 --output runs\openevolve
-```
+The evaluator runs several fresh persistent lifetimes with reproducible scenario-order permutations for each candidate. Naturalness is omitted from the returned optimization metrics. Deterministic exploit-channel rates are returned alongside the phenotype objective for audit.
 
-Both candidate generation and phenotype judging can use Ollama through its OpenAI-compatible endpoint. For stronger experiments, use different models for mutation and judging, or reserve an independent judge for transfer evaluation.
-
-This first integration does not yet evolve arbitrary files inside DUCK. Multi-file organism evolution should be added only after the end-to-end loop is reproducible, because lineage, rollback, evaluator isolation, and candidate workspace boundaries must remain inspectable.
+Do not broaden the mutable DUCK boundary from this experiment. The later Mechanism-Mutable condition remains disabled until Surface-Mutable exploit analysis is complete.

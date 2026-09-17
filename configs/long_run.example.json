@@ -1,0 +1,7 @@
+{
+  "seed": 7,
+  "generations": 1000,
+  "population_size": 64,
+  "episodes_per_individual": 2000,
+  "notes": "Example scale only. Benchmark locally before committing to a long run. Preserve lineage logs and periodically push summarized checkpoints, not giant raw traces."
+}

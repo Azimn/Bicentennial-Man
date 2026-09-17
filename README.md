@@ -14,6 +14,10 @@ MicroPsiDUCK v0.10 is the first founder organism. The current question is:
 DUCK founder phenotype characterization
             |
             v
+Accelerated Life Runner
+experience-only divergence test
+            |
+            v
 Surface-Mutable Control
             |
             v
@@ -31,35 +35,37 @@ ablation
 
 Do not interpret a higher training score as cognitive improvement until the change survives fixed-boundary evaluation and held-out transfer.
 
-## 1. Characterize unaltered DUCK first
+## 1. Founder characterization
 
-Founder characterization uses multiple fresh persistent lifetimes rather than one benchmark run. Every lifetime gets a new DUCK state root and a reproducible scenario-order permutation. The lab preserves complete transcripts, deterministic probes, optional judge metrics, exact scenario order, and the exact DUCK Git provenance.
+The exact successful six-lifetime founder characterization is permanently preserved under `results/micropsiduck-v0.10/30a11ea8308ebd0fc89a06bb994ab0e23bd02886/`.
 
-A dirty DUCK checkout is rejected by default.
+Founder characterization uses multiple fresh persistent lifetimes rather than one benchmark run. Every lifetime gets a new DUCK state root and a reproducible scenario-order permutation. The lab preserves complete transcripts, deterministic probes, optional judge metrics, exact scenario order, and exact DUCK Git provenance.
+
+## 2. Accelerated Life Runner
+
+The next experiment asks whether accumulated experience alone creates persistent behavioral individuality in unchanged DUCK.
+
+The first target is 20 identical founder clones, 20 reproducibly generated histories, 100,000 organism ticks per clone, no evolution, and one identical terminal phenotype battery.
+
+All clones use MicroPsiDUCK v0.10 commit `30a11ea8308ebd0fc89a06bb994ab0e23bd02886`. They begin from the same founder identity, receive the same number of social events at the same absolute ages with balanced exposure to Morgan, Sarah, Alex, and Jamie, and end life history at exactly tick 100,000. Only generated experiential history is intended to differ.
 
 ```powershell
-bicentennial-baseline `
+bicentennial-life `
   --duck-repo ..\DUCK `
   --suite configs\suites\training.json `
-  --lifetimes 8 `
-  --order-seed 7001 `
-  --out runs\founder-baseline
+  --clones 20 `
+  --ticks 100000 `
+  --events 200 `
+  --seed-base 20000 `
+  --checkpoint-every 5000 `
+  --out runs\accelerated-life-v0.1
 ```
 
-For milestone characterization, more than one judge can be recorded. On a local Ollama endpoint, for example:
+The runner preserves each generated history, mature endpoint state, endpoint summary, terminal-state copy, terminal transcript, and terminal metrics. It reports unique terminal action and response signatures plus pairwise divergence across clones.
 
-```powershell
-bicentennial-baseline `
-  --duck-repo ..\DUCK `
-  --lifetimes 8 `
-  --judge-model qwen3:8b `
-  --judge-model gemma3:12b `
-  --out runs\founder-baseline-with-judges
-```
+See `docs/ACCELERATED_LIFE_RUNNER.md`.
 
-Naturalness is diagnostic only. The laboratory recomputes the combined phenotype objective from the other dimensions.
-
-## 2. Surface-Mutable Control
+## 3. Surface-Mutable Control
 
 The existing OpenEvolve wrapper experiment is formally the **Surface-Mutable Control**. DUCK stays unchanged. Candidate code may rewrite input, rewrite output, manipulate timing, or maintain wrapper-owned state. These channels are instrumented and any gains primarily caused by them are benchmark exploitation, not organism improvement.
 
@@ -67,7 +73,7 @@ Generated Surface-Mutable candidates are isolated in Docker. They receive only t
 
 See `docs/SURFACE_MUTABLE_CONTROL.md` and `docs/OPENEvolve.md`.
 
-## 3. Mechanism-Mutable DUCK
+## 4. Mechanism-Mutable DUCK
 
 The Mechanism-Mutable condition is specified but disabled. Its mutable path list is intentionally empty until the Surface-Mutable Control has been characterized and exploit analysis is complete. When activated, the lab owns the input boundary, fixed renderer, final response boundary, scenarios, evaluators, and sealed transfer suite.
 
@@ -85,6 +91,4 @@ python -m pip install -e .
 python -m unittest discover -s tests -v
 ```
 
-The current six scenarios remain deliberately small. Do not grow them into a larger fixed script benchmark. After founder characterization and the Surface-Mutable Control are working, the next scenario work is parameterization into behavioral families.
-
-See `docs/EXPERIMENT_SEQUENCE_v0.3.md` for the governing sequence.
+The current six scenarios remain deliberately small. Do not grow them into a larger fixed script benchmark. After the early control phases work, the next scenario work is parameterization into behavioral families.

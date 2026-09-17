@@ -54,3 +54,53 @@ jobs:
             Bicentennial-Man/baseline-artifacts/lifetimes/**/transcript.json
             Bicentennial-Man/baseline-artifacts/lifetimes/**/metrics.json
           if-no-files-found: error
+
+  accelerated-life-smoke:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out Bicentennial Man
+        uses: actions/checkout@v4
+        with:
+          path: Bicentennial-Man
+      - name: Check out pinned MicroPsiDUCK v0.10
+        uses: actions/checkout@v4
+        with:
+          repository: Azimn/DUCK
+          ref: 30a11ea8308ebd0fc89a06bb994ab0e23bd02886
+          path: DUCK
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install lab
+        working-directory: Bicentennial-Man
+        run: python -m pip install -e .
+      - name: Run two-clone accelerated-life integration smoke
+        working-directory: Bicentennial-Man
+        run: >-
+          bicentennial-life
+          --duck-repo ../DUCK
+          --suite configs/suites/training.json
+          --clones 2
+          --ticks 500
+          --events 12
+          --seed-base 29000
+          --checkpoint-every 100
+          --out accelerated-life-smoke
+          --overwrite
+      - name: Verify matched endpoints and terminal battery
+        working-directory: Bicentennial-Man
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          root = Path('accelerated-life-smoke')
+          summary = json.loads((root / 'summary.json').read_text())
+          assert summary['clone_count'] == 2
+          assert summary['ticks_per_clone_before_terminal_battery'] == 500
+          for clone in summary['clones']:
+              endpoint = json.loads((root / clone['paths']['endpoint']).read_text())
+              assert endpoint['tick'] == 500
+              metrics = json.loads((root / clone['paths']['terminal_metrics']).read_text())
+              assert len(metrics['action_signature']) == 16
+          PY

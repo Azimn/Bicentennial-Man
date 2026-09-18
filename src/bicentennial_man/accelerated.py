@@ -180,6 +180,113 @@ def _pairwise(values: list[tuple[str, ...]]) -> dict[str, float]:
     }
 
 
+def _prepare_history_file(
+    *,
+    history: GeneratedHistory,
+    history_path: Path,
+    source_history_path: Path | None = None,
+) -> None:
+    history_payload = history.to_dict()
+    if source_history_path is not None:
+        source_bytes = source_history_path.read_bytes()
+        source_payload = json.loads(source_bytes.decode("utf-8"))
+        if source_payload != history_payload:
+            raise ValueError("source replicate history does not match the generated source history")
+        if history_path.exists():
+            if history_path.read_bytes() != source_bytes:
+                raise ValueError(f"persisted replicate history is not byte-identical: {history_path}")
+        else:
+            history_path.parent.mkdir(parents=True, exist_ok=True)
+            shutil.copyfile(source_history_path, history_path)
+        if history_path.read_bytes() != source_bytes:
+            raise RuntimeError("identical-history replicate copy is not byte-identical")
+        return
+
+    if history_path.exists():
+        existing = json.loads(history_path.read_text(encoding="utf-8"))
+        if existing != history_payload:
+            raise ValueError(f"persisted history does not match generated history: {history_path}")
+    else:
+        _write_json(history_path, history_payload)
+
+
+def _run_one_clone(
+    *,
+    duck_repo: Path,
+    suite_path: Path,
+    output_root: Path,
+    clone_id: str,
+    clone_dir: Path,
+    history: GeneratedHistory,
+    host_type,
+    WorldEvent,
+    checkpoint_every: int,
+    timeout: float,
+    source_history_path: Path | None = None,
+) -> tuple[dict[str, Any], tuple[str, ...], tuple[str, ...], dict[str, Any]]:
+    clone_dir.mkdir(parents=True, exist_ok=True)
+    history_path = clone_dir / "history.json"
+    _prepare_history_file(
+        history=history,
+        history_path=history_path,
+        source_history_path=source_history_path,
+    )
+
+    matured_state = clone_dir / "matured-state"
+    host = host_type.open(
+        matured_state,
+        name="Aster",
+        subject_id=FOUNDER_SUBJECT_ID,
+    )
+    _experience_history(
+        host,
+        WorldEvent,
+        history,
+        checkpoint_every=checkpoint_every,
+    )
+    endpoint = _state_summary(host)
+    endpoint["history_seed"] = history.seed
+    endpoint["history_sha256"] = history.sha256()
+    endpoint["history_file_sha256"] = _sha256_file(history_path)
+    endpoint_path = clone_dir / "endpoint.json"
+    _write_json(endpoint_path, endpoint)
+
+    terminal_state = clone_dir / "terminal-state"
+    transcript_path = clone_dir / "terminal-transcript.json"
+    metrics_path = clone_dir / "terminal-metrics.json"
+    if terminal_state.exists():
+        shutil.rmtree(terminal_state)
+    shutil.copytree(matured_state, terminal_state)
+    terminal = _terminal_battery(
+        duck_repo=duck_repo,
+        terminal_state=terminal_state,
+        suite_path=suite_path,
+        transcript_path=transcript_path,
+        metrics_path=metrics_path,
+        timeout=timeout,
+    )
+    action_signature = tuple(str(value) for value in terminal["action_signature"])
+    response_signature = tuple(str(value) for value in terminal["response_signature"])
+    row = {
+        "clone_id": clone_id,
+        "seed": history.seed,
+        "history_sha256": history.sha256(),
+        "history_file_sha256": _sha256_file(history_path),
+        "terminal_tick_start": history.target_ticks,
+        "terminal_action_signature": list(action_signature),
+        "terminal_response_signature": list(response_signature),
+        "paths": {
+            "history": str(history_path.relative_to(output_root)),
+            "matured_state": str(matured_state.relative_to(output_root)),
+            "endpoint": str(endpoint_path.relative_to(output_root)),
+            "terminal_state": str(terminal_state.relative_to(output_root)),
+            "terminal_transcript": str(transcript_path.relative_to(output_root)),
+            "terminal_metrics": str(metrics_path.relative_to(output_root)),
+        },
+    }
+    return row, action_signature, response_signature, endpoint
+
+
 def run_accelerated_life_experiment(
     *,
     duck_repo: str | Path,
@@ -190,6 +297,7 @@ def run_accelerated_life_experiment(
     event_count: int = 200,
     seed_base: int = 20_000,
     checkpoint_every: int = 5_000,
+    identical_history_replicates: int = 3,
     timeout: float = 180.0,
     overwrite: bool = False,
 ) -> dict[str, Any]:
@@ -200,8 +308,13 @@ def run_accelerated_life_experiment(
     clones = int(clones)
     target_ticks = int(target_ticks)
     event_count = int(event_count)
+    identical_history_replicates = int(identical_history_replicates)
     if clones < 2:
-        raise ValueError("the individuality experiment requires at least two clones")
+        raise ValueError("the individuality experiment requires at least two primary clones")
+    if identical_history_replicates < 0:
+        raise ValueError("identical_history_replicates cannot be negative")
+    if identical_history_replicates > clones:
+        raise ValueError("identical_history_replicates cannot exceed the primary clone count")
 
     provenance = inspect_git_checkout(duck_repo)
     verify_duck_checkout(
@@ -225,6 +338,7 @@ def run_accelerated_life_experiment(
         "event_count_per_clone": event_count,
         "seed_base": int(seed_base),
         "checkpoint_every": int(checkpoint_every),
+        "identical_history_replicates": identical_history_replicates,
         "terminal_suite": str(suite_path),
         "terminal_suite_sha256": _sha256_file(suite_path),
         "controls": {
@@ -234,8 +348,17 @@ def run_accelerated_life_experiment(
             "same_event_schedule": True,
             "same_actor_exposure_count": True,
             "same_terminal_battery_order": True,
+            "identical_history_reproducibility": identical_history_replicates > 0,
             "evolution": False,
             "surface_mutation": False,
+        },
+        "outcome_causality": {
+            "mode": "exogenous_precomputed",
+            "description": (
+                "Life-event success, valence, and outcome are generated from actor profile and event category "
+                "before DUCK selects an action. v0.1 therefore tests experience-conditioned divergence, not "
+                "reciprocal choice-shaped life trajectories."
+            ),
         },
     }
     manifest_path = output_root / "run_manifest.json"
@@ -250,87 +373,101 @@ def run_accelerated_life_experiment(
     clone_rows: list[dict[str, Any]] = []
     action_signatures: list[tuple[str, ...]] = []
     response_signatures: list[tuple[str, ...]] = []
+    primary_endpoints: dict[str, dict[str, Any]] = {}
+    primary_rows: dict[str, dict[str, Any]] = {}
 
     for clone_index in range(clones):
         clone_id = f"clone-{clone_index:03d}"
-        clone_dir = output_root / "clones" / clone_id
-        clone_dir.mkdir(parents=True, exist_ok=True)
         history = generate_history(
             clone_index=clone_index,
             seed=int(seed_base) + clone_index,
             target_ticks=target_ticks,
             event_count=event_count,
         )
-        history_path = clone_dir / "history.json"
-        history_payload = history.to_dict()
-        if history_path.exists():
-            existing = json.loads(history_path.read_text(encoding="utf-8"))
-            if existing != history_payload:
-                raise ValueError(f"persisted history does not match generated history for {clone_id}")
-        else:
-            _write_json(history_path, history_payload)
-
-        matured_state = clone_dir / "matured-state"
-        host = host_type.open(
-            matured_state,
-            name="Aster",
-            subject_id=FOUNDER_SUBJECT_ID,
-        )
-        _experience_history(
-            host,
-            WorldEvent,
-            history,
-            checkpoint_every=checkpoint_every,
-        )
-        endpoint = _state_summary(host)
-        endpoint["history_seed"] = history.seed
-        endpoint["history_sha256"] = history.sha256()
-        endpoint_path = clone_dir / "endpoint.json"
-        _write_json(endpoint_path, endpoint)
-
-        terminal_state = clone_dir / "terminal-state"
-        transcript_path = clone_dir / "terminal-transcript.json"
-        metrics_path = clone_dir / "terminal-metrics.json"
-        if terminal_state.exists():
-            shutil.rmtree(terminal_state)
-        shutil.copytree(matured_state, terminal_state)
-        terminal = _terminal_battery(
+        row, action_signature, response_signature, endpoint = _run_one_clone(
             duck_repo=duck_repo,
-            terminal_state=terminal_state,
             suite_path=suite_path,
-            transcript_path=transcript_path,
-            metrics_path=metrics_path,
+            output_root=output_root,
+            clone_id=clone_id,
+            clone_dir=output_root / "clones" / clone_id,
+            history=history,
+            host_type=host_type,
+            WorldEvent=WorldEvent,
+            checkpoint_every=checkpoint_every,
             timeout=timeout,
         )
-        action_signature = tuple(str(value) for value in terminal["action_signature"])
-        response_signature = tuple(str(value) for value in terminal["response_signature"])
+        clone_rows.append(row)
         action_signatures.append(action_signature)
         response_signatures.append(response_signature)
-        clone_rows.append(
+        primary_endpoints[clone_id] = endpoint
+        primary_rows[clone_id] = row
+
+    replicate_rows: list[dict[str, Any]] = []
+    replicate_checks: list[dict[str, Any]] = []
+    for replicate_index in range(identical_history_replicates):
+        source_clone_id = f"clone-{replicate_index:03d}"
+        source_row = primary_rows[source_clone_id]
+        source_history_path = output_root / source_row["paths"]["history"]
+        history = generate_history(
+            clone_index=replicate_index,
+            seed=int(seed_base) + replicate_index,
+            target_ticks=target_ticks,
+            event_count=event_count,
+        )
+        replicate_id = f"replicate-{replicate_index:03d}-of-{source_clone_id}"
+        replicate_dir = (
+            output_root
+            / "controls"
+            / "identical-history"
+            / f"pair-{replicate_index:03d}"
+            / "replicate"
+        )
+        row, action_signature, response_signature, endpoint = _run_one_clone(
+            duck_repo=duck_repo,
+            suite_path=suite_path,
+            output_root=output_root,
+            clone_id=replicate_id,
+            clone_dir=replicate_dir,
+            history=history,
+            host_type=host_type,
+            WorldEvent=WorldEvent,
+            checkpoint_every=checkpoint_every,
+            timeout=timeout,
+            source_history_path=source_history_path,
+        )
+        source_actions = tuple(str(value) for value in source_row["terminal_action_signature"])
+        source_responses = tuple(str(value) for value in source_row["terminal_response_signature"])
+        endpoint_match = endpoint == primary_endpoints[source_clone_id]
+        action_match = action_signature == source_actions
+        response_match = response_signature == source_responses
+        byte_identical_history = (
+            _sha256_file(source_history_path)
+            == _sha256_file(output_root / row["paths"]["history"])
+        )
+        passed = byte_identical_history and endpoint_match and action_match and response_match
+        replicate_rows.append(row)
+        replicate_checks.append(
             {
-                "clone_id": clone_id,
-                "seed": history.seed,
-                "history_sha256": history.sha256(),
-                "terminal_tick_start": target_ticks,
-                "terminal_action_signature": list(action_signature),
-                "terminal_response_signature": list(response_signature),
-                "paths": {
-                    "history": str(history_path.relative_to(output_root)),
-                    "matured_state": str(matured_state.relative_to(output_root)),
-                    "endpoint": str(endpoint_path.relative_to(output_root)),
-                    "terminal_state": str(terminal_state.relative_to(output_root)),
-                    "terminal_transcript": str(transcript_path.relative_to(output_root)),
-                    "terminal_metrics": str(metrics_path.relative_to(output_root)),
-                },
+                "pair_index": replicate_index,
+                "source_clone_id": source_clone_id,
+                "replicate_clone_id": replicate_id,
+                "history_file_sha256": row["history_file_sha256"],
+                "history_byte_identical": byte_identical_history,
+                "endpoint_match": endpoint_match,
+                "terminal_action_signature_match": action_match,
+                "terminal_response_signature_match": response_match,
+                "passed": passed,
             }
         )
 
+    control_passed = all(row["passed"] for row in replicate_checks)
     summary = {
         "schema": RUN_SCHEMA,
         "experiment": "same-origin-divergence-accelerated-life-v0.1",
-        "condition": "unchanged DUCK; experience history is the only planned between-clone manipulation",
+        "condition": "unchanged DUCK; experience history is the only planned between-primary-clone manipulation",
         "duck_commit": EXPECTED_DUCK_COMMIT,
         "clone_count": clones,
+        "control_clone_count": identical_history_replicates,
         "ticks_per_clone_before_terminal_battery": target_ticks,
         "events_per_clone": event_count,
         "terminal_suite_sha256": _sha256_file(suite_path),
@@ -339,11 +476,34 @@ def run_accelerated_life_experiment(
         "pairwise_action_divergence": _pairwise(action_signatures),
         "pairwise_response_divergence": _pairwise(response_signatures),
         "clones": clone_rows,
+        "identical_history_control": {
+            "pair_count": identical_history_replicates,
+            "passed": control_passed,
+            "requirement": (
+                "Byte-identical histories must reproduce the same mature endpoint summary and terminal "
+                "action/response signatures. A failure invalidates attribution of primary-clone divergence "
+                "to generated experience alone."
+            ),
+            "pairs": replicate_checks,
+            "replicates": replicate_rows,
+        },
+        "outcome_causality": {
+            "mode": "exogenous_precomputed",
+            "interpretation": (
+                "v0.1 tests whether different experienced histories can produce persistent divergence in an "
+                "unchanged organism. It does not test whether DUCK's choices create different future lives "
+                "through reciprocal interaction."
+            ),
+        },
         "interpretation_rule": (
             "Terminal divergence under matched code, initial identity, age, interaction density, and battery is evidence of "
-            "experience-conditioned phenotypic divergence. It is not by itself evidence of human-like individuality, "
-            "cognitive improvement, or an artificiality benchmark victory."
+            "experience-conditioned phenotypic divergence only if the identical-history reproducibility control passes. "
+            "It is not by itself evidence of human-like individuality, cognitive improvement, or an artificiality benchmark victory."
         ),
     }
     _write_json(output_root / "summary.json", summary)
+    if not control_passed:
+        raise RuntimeError(
+            "identical-history reproducibility control failed; do not attribute primary-clone divergence to experience alone"
+        )
     return summary

@@ -1,0 +1,61 @@
+name: accelerated-life-v0.1.1-engineering-benchmark
+
+on:
+  push:
+    branches:
+      - accelerated-life-v0.1.1-engineering
+  workflow_dispatch:
+
+jobs:
+  benchmark:
+    runs-on: windows-latest
+    timeout-minutes: 330
+    steps:
+      - name: Check out Bicentennial Man
+        uses: actions/checkout@v4
+        with:
+          path: Bicentennial-Man
+      - name: Check out pinned MicroPsiDUCK v0.10
+        uses: actions/checkout@v4
+        with:
+          repository: Azimn/DUCK
+          ref: 30a11ea8308ebd0fc89a06bb994ab0e23bd02886
+          path: DUCK
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install Bicentennial Man
+        working-directory: Bicentennial-Man
+        shell: pwsh
+        run: python -m pip install -e .
+      - name: Run 10k-tick execution benchmark
+        working-directory: Bicentennial-Man
+        shell: pwsh
+        run: |
+          $start = Get-Date
+          bicentennial-life `
+            --duck-repo ..\DUCK `
+            --suite configs\suites\training.json `
+            --clones 2 `
+            --ticks 10000 `
+            --events 20 `
+            --seed-base 20000 `
+            --checkpoint-every 1000 `
+            --identical-history-replicates 2 `
+            --out runs\accelerated-life-v0.1.1-benchmark
+          $elapsed = ((Get-Date) - $start).TotalSeconds
+          @{elapsed_seconds=$elapsed; ticks_per_primary_clone=10000; primary_clones=2; control_clones=2} | ConvertTo-Json | Set-Content runs\accelerated-life-v0.1.1-benchmark\benchmark-timing.json
+      - name: Verify benchmark semantics
+        working-directory: Bicentennial-Man
+        shell: pwsh
+        run: |
+          python -c "import json,pathlib; p=pathlib.Path('runs/accelerated-life-v0.1.1-benchmark/summary.json'); s=json.loads(p.read_text()); assert s['clone_count']==2; assert s['control_clone_count']==2; assert s['ticks_per_clone_before_terminal_battery']==10000; assert s['identical_history_control']['passed'] is True; print(json.dumps(s['identical_history_control'], indent=2))"
+      - name: Upload benchmark and partial checkpoints
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: accelerated-life-v0.1.1-engineering
+          path: Bicentennial-Man/runs/accelerated-life-v0.1.1-benchmark
+          if-no-files-found: warn
+          retention-days: 30

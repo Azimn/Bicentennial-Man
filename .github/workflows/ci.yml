@@ -86,9 +86,10 @@ jobs:
           --events 12
           --seed-base 29000
           --checkpoint-every 100
+          --identical-history-replicates 1
           --out accelerated-life-smoke
           --overwrite
-      - name: Verify matched endpoints and terminal battery
+      - name: Verify matched endpoints, terminal battery, and reproducibility control
         working-directory: Bicentennial-Man
         run: |
           python - <<'PY'
@@ -97,7 +98,14 @@ jobs:
           root = Path('accelerated-life-smoke')
           summary = json.loads((root / 'summary.json').read_text())
           assert summary['clone_count'] == 2
+          assert summary['control_clone_count'] == 1
           assert summary['ticks_per_clone_before_terminal_battery'] == 500
+          assert summary['identical_history_control']['passed'] is True
+          pair = summary['identical_history_control']['pairs'][0]
+          assert pair['history_byte_identical'] is True
+          assert pair['endpoint_match'] is True
+          assert pair['terminal_action_signature_match'] is True
+          assert pair['terminal_response_signature_match'] is True
           for clone in summary['clones']:
               endpoint = json.loads((root / clone['paths']['endpoint']).read_text())
               assert endpoint['tick'] == 500

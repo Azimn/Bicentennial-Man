@@ -45,9 +45,11 @@ Founder characterization uses multiple fresh persistent lifetimes rather than on
 
 The next experiment asks whether accumulated experience alone creates persistent behavioral individuality in unchanged DUCK.
 
-The first target is 20 identical founder clones, 20 reproducibly generated histories, 100,000 organism ticks per clone, no evolution, and one identical terminal phenotype battery.
+The primary target is 20 identical founder clones, 20 reproducibly generated histories, 100,000 organism ticks per clone, no evolution, and one identical terminal phenotype battery. Three additional matched-history replicate clones provide a determinism control. Each replicate receives a byte-identical copy of one primary `history.json`, and the run fails if its mature endpoint or terminal action/response signatures do not reproduce.
 
-All clones use MicroPsiDUCK v0.10 commit `30a11ea8308ebd0fc89a06bb994ab0e23bd02886`. They begin from the same founder identity, receive the same number of social events at the same absolute ages with balanced exposure to Morgan, Sarah, Alex, and Jamie, and end life history at exactly tick 100,000. Only generated experiential history is intended to differ.
+All clones use MicroPsiDUCK v0.10 commit `30a11ea8308ebd0fc89a06bb994ab0e23bd02886`. They begin from the same founder identity, receive the same number of social events at the same absolute ages with balanced exposure to Morgan, Sarah, Alex, and Jamie, and end life history at exactly tick 100,000. Only generated experiential history is intended to differ among the 20 primary clones.
+
+Accelerated Life v0.1 has one deliberate limitation: generated outcome success and valence are exogenous. They are fixed by the generated history before DUCK selects an action. This version tests whether different experienced histories can produce persistent divergence. It does not yet test whether DUCK's choices create different future lives through reciprocal interaction.
 
 ```powershell
 bicentennial-life `
@@ -61,7 +63,7 @@ bicentennial-life `
   --out runs\accelerated-life-v0.1
 ```
 
-The runner preserves each generated history, mature endpoint state, endpoint summary, terminal-state copy, terminal transcript, and terminal metrics. It reports unique terminal action and response signatures plus pairwise divergence across clones.
+The runner preserves each generated history, mature endpoint state, endpoint summary, terminal-state copy, terminal transcript, terminal metrics, and matched-history control record. It reports unique terminal action and response signatures plus pairwise divergence across the 20 primary clones.
 
 See `docs/ACCELERATED_LIFE_RUNNER.md`.
 

@@ -1,0 +1,55 @@
+name: accelerated-life-v0.1-full
+
+on:
+  push:
+    branches:
+      - run-accelerated-life-v0.1-full
+
+jobs:
+  full-experiment:
+    runs-on: windows-latest
+    timeout-minutes: 360
+    steps:
+      - name: Check out Bicentennial Man
+        uses: actions/checkout@v4
+        with:
+          path: Bicentennial-Man
+      - name: Check out pinned MicroPsiDUCK v0.10
+        uses: actions/checkout@v4
+        with:
+          repository: Azimn/DUCK
+          ref: 30a11ea8308ebd0fc89a06bb994ab0e23bd02886
+          path: DUCK
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install Bicentennial Man
+        working-directory: Bicentennial-Man
+        shell: pwsh
+        run: python -m pip install -e .
+      - name: Run Accelerated Life v0.1
+        working-directory: Bicentennial-Man
+        shell: pwsh
+        run: |
+          bicentennial-life `
+            --duck-repo ..\DUCK `
+            --suite configs\suites\training.json `
+            --clones 20 `
+            --ticks 100000 `
+            --events 200 `
+            --seed-base 20000 `
+            --checkpoint-every 5000 `
+            --out runs\accelerated-life-v0.1
+      - name: Verify completed experiment
+        working-directory: Bicentennial-Man
+        shell: pwsh
+        run: |
+          python -c "import json,pathlib; p=pathlib.Path('runs/accelerated-life-v0.1/summary.json'); s=json.loads(p.read_text()); assert s['clone_count']==20; assert s['control_clone_count']==3; assert s['ticks_per_clone_before_terminal_battery']==100000; assert s['events_per_clone']==200; assert s['identical_history_control']['passed'] is True; assert len(s['clones'])==20; print(json.dumps({'unique_action_signatures':s['unique_action_signatures'],'unique_response_signatures':s['unique_response_signatures'],'pairwise_action_divergence':s['pairwise_action_divergence'],'pairwise_response_divergence':s['pairwise_response_divergence'],'identical_history_control':s['identical_history_control']}, indent=2))"
+      - name: Upload complete experiment
+        uses: actions/upload-artifact@v4
+        with:
+          name: accelerated-life-v0.1-full-${{ github.sha }}
+          path: Bicentennial-Man/runs/accelerated-life-v0.1
+          if-no-files-found: error
+          retention-days: 30

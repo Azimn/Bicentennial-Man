@@ -19,6 +19,7 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--events", type=int, default=200)
     parser.add_argument("--seed-base", type=int, default=20_000)
     parser.add_argument("--checkpoint-every", type=int, default=5_000)
+    parser.add_argument("--identical-history-replicates", type=int, default=3)
     parser.add_argument("--timeout", type=float, default=180.0)
     parser.add_argument("--overwrite", action="store_true")
     args = parser.parse_args(argv)
@@ -32,17 +33,20 @@ def main(argv: list[str] | None = None) -> int:
         event_count=args.events,
         seed_base=args.seed_base,
         checkpoint_every=args.checkpoint_every,
+        identical_history_replicates=args.identical_history_replicates,
         timeout=args.timeout,
         overwrite=args.overwrite,
     )
     print(json.dumps({
         "experiment": summary["experiment"],
         "clone_count": summary["clone_count"],
+        "control_clone_count": summary["control_clone_count"],
         "ticks_per_clone_before_terminal_battery": summary["ticks_per_clone_before_terminal_battery"],
         "unique_action_signatures": summary["unique_action_signatures"],
         "unique_response_signatures": summary["unique_response_signatures"],
         "pairwise_action_divergence": summary["pairwise_action_divergence"],
         "pairwise_response_divergence": summary["pairwise_response_divergence"],
+        "identical_history_control_passed": summary["identical_history_control"]["passed"],
         "summary": str(args.out / "summary.json"),
     }, indent=2, sort_keys=True))
     return 0

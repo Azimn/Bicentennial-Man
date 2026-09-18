@@ -1,10 +1,11 @@
 from __future__ import annotations
 
 from collections import Counter
+from pathlib import Path
 import tempfile
 import unittest
 
-from bicentennial_man.accelerated import _fraction_different, _pairwise
+from bicentennial_man.accelerated import _fraction_different, _pairwise, _prepare_history_file
 from bicentennial_man.accelerated_history import ACTORS, common_event_ticks, generate_history
 
 
@@ -35,6 +36,35 @@ class AcceleratedLifeTests(unittest.TestCase):
         counts = Counter(event.source for event in history.events)
         self.assertEqual(set(counts), set(ACTORS))
         self.assertEqual(set(counts.values()), {50})
+
+    def test_identical_history_control_copies_bytes_exactly(self):
+        history = generate_history(clone_index=0, seed=20_000, target_ticks=1_000, event_count=20)
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            source = root / "source.json"
+            replica = root / "replica.json"
+            _prepare_history_file(history=history, history_path=source)
+            _prepare_history_file(
+                history=history,
+                history_path=replica,
+                source_history_path=source,
+            )
+            self.assertEqual(source.read_bytes(), replica.read_bytes())
+
+    def test_identical_history_control_rejects_modified_copy(self):
+        history = generate_history(clone_index=0, seed=20_000, target_ticks=1_000, event_count=20)
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            source = root / "source.json"
+            replica = root / "replica.json"
+            _prepare_history_file(history=history, history_path=source)
+            replica.write_text("{}")
+            with self.assertRaises(ValueError):
+                _prepare_history_file(
+                    history=history,
+                    history_path=replica,
+                    source_history_path=source,
+                )
 
     def test_pairwise_divergence_reports_behavioral_separation(self):
         rows = [
